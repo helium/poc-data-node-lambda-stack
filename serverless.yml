@@ -1,0 +1,51 @@
+service: poc-data-node-lambda-stack
+frameworkVersion: "3"
+
+custom:
+  DEST_BUCKET: foundation-poc-data-requester-pays
+
+provider:
+  name: aws
+  stage: ${env:STAGE}
+  region: ${env:REGION}
+  profile: ${env:ENV}-${env:STAGE}
+  runtime: nodejs18.x
+
+functions:
+  PoCDataObjectReplicatorToS3RequesterPays:
+    handler: src/index.handler
+    environment:
+      DEST_BUCKET: ${self:custom.DEST_BUCKET}
+      REGION: ${env:REGION}
+    timeout: 15
+    logRetentionInDays: 30
+    name: PoCDataObjectReplicatorToS3RequesterPays
+    description: Replicates S3 objects between buckets
+    role: arn:aws:iam::${aws:accountId}:role/PoCDataObjectReplicatorToS3RequesterPaysRole
+    vpc:
+      securityGroupIds:
+        - ${ssm:/vpc/s3_replicator_lambda_security_group_id}
+      subnetIds:
+        - ${ssm:/vpc/private_subnet_id_a}
+        - ${ssm:/vpc/private_subnet_id_b}
+    maximumRetryAttempts: 2
+    maximumEventAge: 21600
+    onError: ${ssm:/sqs/dlq_arn}
+    events:
+      - eventBridge:
+          pattern:
+            source:
+              - "aws.s3"
+            detail-type:
+              - "Object Created"
+            detail:
+              bucket:
+                name: ${ssm:/s3/hf_bucket_names}
+          retryPolicy:
+            maximumEventAge: 86400
+            maximumRetryAttempts: 185
+          deadLetterQueueArn: ${ssm:/sqs/dlq_arn}
+
+plugins:
+  - serverless-esbuild
+  - serverless-plugin-utils
