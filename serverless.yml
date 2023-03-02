@@ -13,7 +13,7 @@ provider:
 
 functions:
   PoCDataObjectReplicatorToS3RequesterPays:
-    handler: src/index.handler
+    handler: src/PoCDataObjectReplicatorToS3RequesterPays/index.handler
     environment:
       DEST_BUCKET: ${self:custom.DEST_BUCKET}
       REGION: ${env:REGION}
