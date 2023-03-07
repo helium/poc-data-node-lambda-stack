@@ -1,0 +1,7 @@
+# Ignore artifacts:
+
+.vscode
+
+.serverless
+
+node_modules
