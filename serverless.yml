@@ -20,7 +20,7 @@ functions:
     timeout: 15
     logRetentionInDays: 30
     provisionedConcurrency: 10
-    reservedConcurrency: 50 #
+    reservedConcurrency: 50
     name: PoCDataObjectReplicatorToS3RequesterPays
     description: Replicates S3 objects between buckets
     role: arn:aws:iam::${aws:accountId}:role/PoCDataObjectReplicatorToS3RequesterPaysRole
