@@ -1,7 +1,6 @@
 import { S3ObjectCreatedNotificationEventDetail } from "aws-lambda";
 import { S3Client, CopyObjectCommand } from "@aws-sdk/client-s3";
 
-const UNIX_MS_REGEX = /^\d{13}$/;
 const { DEST_BUCKET } = process.env;
 
 export const recordHandler = async ({
