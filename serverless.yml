@@ -29,6 +29,8 @@ functions:
         - ${ssm:/vpc/private_subnet_id_a}
         - ${ssm:/vpc/private_subnet_id_b}
     maximumRetryAttempts: 2
+    provisionedConcurrency: 10
+    reservedConcurrency: 100
     maximumEventAge: 21600
     onError: ${ssm:/sqs/dlq_arn}
     events:
