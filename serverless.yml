@@ -32,7 +32,10 @@ functions:
         - ${ssm:/vpc/private_subnet_id_b}
     maximumRetryAttempts: 2
     maximumEventAge: 21600
-    onError: ${ssm:/sqs/dlq_arn}
+    onError: 
+      Fn::Join:
+        - ""
+        - ${ssm:/sqs/dlq_arn}
     events:
       - eventBridge:
           pattern:
