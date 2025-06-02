@@ -1,5 +1,5 @@
 service: poc-data-node-lambda-stack
-frameworkVersion: "3"
+frameworkVersion: "4"
 
 custom:
   DEST_BUCKET: foundation-poc-data-requester-pays
@@ -9,7 +9,7 @@ provider:
   stage: ${env:STAGE}
   region: ${env:REGION}
   profile: ${env:ENV}-${env:STAGE}
-  runtime: nodejs18.x
+  runtime: nodejs20.x
 
 functions:
   PoCDataObjectReplicatorToS3RequesterPays:
@@ -52,5 +52,4 @@ functions:
           deadLetterQueueArn: ${ssm:/sqs/dlq_arn}
 
 plugins:
-  - serverless-esbuild
   - serverless-plugin-utils
